@@ -1,0 +1,51 @@
+const students = [
+  {
+    id: 1,
+    name: 'Anu',
+    course: 'MERN Stack',
+    batchName: 'MERN May 2026',
+    month: 5,
+    year: 2026,
+    phone: '',
+    email: '',
+    courseStatus: 'ongoing',
+    feeCompleted: true,
+    projectCompleted: false,
+    placementStatus: 'project_not_completed',
+    remarks: '',
+  },
+  {
+    id: 2,
+    name: 'Anna',
+    course: 'UI/UX',
+    batchName: 'UI/UX April 2026',
+    month: 5,
+    year: 2026,
+    phone: '',
+    email: '',
+    courseStatus: 'ongoing',
+    feeCompleted: true,
+    projectCompleted: false,
+    placementStatus: 'fee_not_completed',
+    remarks: '',
+  },
+  {
+    id: 3,
+    name: 'Meera',
+    course: 'Digital Marketing',
+    batchName: 'MERN May 2026 ',
+    month: 5,
+    year: 2026,
+    phone: '',
+    email: '',
+    courseStatus: 'ongoing',
+    feeCompleted: true,
+    projectCompleted: false,
+    placementStatus: 'project_completed',
+    remarks: '',
+  },
+];
+export async function listStudents() {
+  await new Promise(r => setTimeout(r, 300));
+  return students;
+}
