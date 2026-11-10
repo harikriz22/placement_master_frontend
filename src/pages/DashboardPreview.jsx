@@ -1,6 +1,9 @@
 import React from 'react';
 import Navbar from '../components/common/Navbar';
 import { useAuth } from '../context/AuthContext';
+import { useEffect, useState } from 'react';
+import { listStudents } from '../services/studentService';
+import { getDashboardCounts } from '../utils/dashboardCounts';
 import {
   Users,
   UserCheck,
@@ -16,59 +19,69 @@ import {
 
 export default function DashboardPreview() {
   const { user } = useAuth();
+  const [counts, setCounts] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    listStudents()
+      .then(students => setCounts(getDashboardCounts(students)))
+      .catch(() =>
+        setError('Failed to fetch student data. Please try again later.')
+      );
+  }, []);
 
   const metrics = [
     {
+      key: 'totalEnrolled',
       title: 'Total Enrolled',
-      count: 148,
       desc: 'Students registered across all batches',
       icon: Users,
       color: 'blue',
       badge: 'All Active Batches',
     },
     {
+      key: 'eligible',
       title: 'Placement Eligible',
-      count: 92,
       desc: 'Students meeting placement eligibility criteria',
       icon: UserCheck,
       color: 'emerald',
       badge: 'All Eligible Students',
     },
     {
+      key: 'notEligible',
       title: 'Not Eligible',
-      count: 56,
       desc: 'Students who have not met eligibility requirements',
       icon: UserX,
       color: 'amber',
       badge: 'All non-eligible Students',
     },
     {
+      key: 'dropped',
       title: 'Discontinued',
-      count: 12,
       desc: 'Students who discontinued their training',
       icon: UserMinus,
       color: 'rose',
       badge: 'Dropped Students',
     },
     {
+      key: 'batchSwitch',
       title: 'Batch Transfers',
-      count: 19,
       desc: 'Students who transferred between batches',
       icon: ArrowRightLeft,
       color: 'purple',
       badge: 'Batch Switch Students ',
     },
     {
+      key: 'rejoined',
       title: 'Rejoined Students',
-      count: 7,
       desc: 'Students who resumed training',
       icon: RotateCcw,
       color: 'cyan',
       badge: 'Resumed',
     },
     {
+      key: 'placed',
       title: 'Successfully Placed',
-      count: 64,
       desc: 'Students who secured placement offers',
       icon: Award,
       color: 'teal',
@@ -122,7 +135,7 @@ export default function DashboardPreview() {
             </p>
           </div>
         </div>
-
+        {error && <p className="text-red-500 mb-4">{error}</p>}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {metrics.map((m, idx) => {
             const Icon = m.icon;
@@ -141,7 +154,7 @@ export default function DashboardPreview() {
                 </div>
 
                 <div className="text-3xl font-black text-slate-900 tracking-tight mb-1">
-                  {m.count}
+                  {counts ? counts[m.key] : '–'}
                 </div>
                 <div className="text-sm font-semibold text-slate-800 mb-1">
                   {m.title}

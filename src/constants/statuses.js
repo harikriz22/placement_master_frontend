@@ -108,6 +108,11 @@ export const MONTHS = [
   { value: 11, label: 'November' },
   { value: 12, label: 'December' },
 ];
+const thisYear = new Date().getFullYear();
+export const YEARS = [thisYear - 1, thisYear, thisYear + 1].map(y => ({
+  value: y,
+  label: String(y),
+}));
 
 export const labelOf = (list, value) =>
   list.find(item => item.value === value)?.label ?? value;
