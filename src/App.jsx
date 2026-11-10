@@ -7,6 +7,8 @@ import RegisterPage from './pages/RegisterPage';
 import DashboardPreview from './pages/DashboardPreview';
 import PlaceholderPage from './pages/PlaceholderPage';
 import StudentPage from './pages/StudentPage';
+import BatchPage from './pages/BatchPage';
+import CourseStudentsPage from './pages/CourseStudentsPage';
 
 export default function App() {
   return (
@@ -38,11 +40,15 @@ export default function App() {
             path="/batches"
             element={
               <ProtectedRoute>
-                <PlaceholderPage
-                  title="Batches Overview"
-                  section="Batches Page"
-                  description="Browse courses, then select a batch to view its students, metrics, and eligibility summary."
-                />
+                <BatchPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/batches/:course"
+            element={
+              <ProtectedRoute>
+                <CourseStudentsPage />
               </ProtectedRoute>
             }
           />
