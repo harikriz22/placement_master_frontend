@@ -143,6 +143,7 @@ export default function StudentFormModal({ student, onClose, onSaved }) {
               className={inputClass}
               value={form.course}
               onChange={set('course')}
+              disabled={!!student}
             >
               <option value="">Select course</option>
               {COURSES.map(c => (
@@ -151,6 +152,11 @@ export default function StudentFormModal({ student, onClose, onSaved }) {
                 </option>
               ))}
             </select>
+            {student && (
+              <span className="text-xs font-normal text-slate-500">
+                Use the switch button to change the course.
+              </span>
+            )}
           </FormField>
           <FormField label="Batch name" error={errors.batchName}>
             <input

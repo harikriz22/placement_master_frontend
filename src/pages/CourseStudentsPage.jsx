@@ -4,14 +4,48 @@ import Navbar from '../components/common/Navbar';
 import FilterSelect from '../components/common/FilterSelect';
 import { useStudents } from '../hooks/useStudents';
 import { COURSES } from '../constants/courses';
-import { MONTHS } from '../constants/statuses';
+import {
+  MONTHS,
+  COURSE_STATUS,
+  PLACEMENT_STATUS,
+  labelOf,
+} from '../constants/statuses';
 import { isEligible } from '../utils/eligibility';
 
 const COLUMNS = [
   { header: 'Name', render: s => s.name },
-  { header: 'Batch', render: s => s.batchName },
-  { header: 'Phone', render: s => s.phone },
   { header: 'Email', render: s => s.email },
+  { header: 'Phone', render: s => s.phone },
+  {
+    header: 'Course Status',
+    render: s => labelOf(COURSE_STATUS, s.courseStatus),
+  },
+  {
+    header: 'Fee Status',
+    render: s => (s.feeCompleted ? 'Completed' : 'Pending'),
+  },
+  {
+    header: 'Project Status',
+    render: s => (s.projectCompleted ? 'Completed' : 'Pending'),
+  },
+  {
+    header: 'Eligibility',
+    render: s => (
+      <span
+        className={`px-2 py-0.5 rounded-full text-xs font-semibold ${
+          isEligible(s)
+            ? 'bg-emerald-100 text-emerald-700'
+            : 'bg-amber-100 text-amber-700'
+        }`}
+      >
+        {isEligible(s) ? 'Yes' : 'No'}
+      </span>
+    ),
+  },
+  {
+    header: 'Placement Status',
+    render: s => labelOf(PLACEMENT_STATUS, s.placementStatus),
+  },
 ];
 
 const CARD = 'bg-white border border-slate-200 rounded-xl p-4';
@@ -19,6 +53,7 @@ const CARD = 'bg-white border border-slate-200 rounded-xl p-4';
 export default function CourseStudentsPage() {
   const [month, setMonth] = useState('');
   const [year, setYear] = useState('');
+  const [batch, setBatch] = useState('');
   const { course } = useParams();
   const { students, loading, error } = useStudents();
   const isValidCourse = COURSES.includes(course);
@@ -33,9 +68,13 @@ export default function CourseStudentsPage() {
   const yearOptions = [...new Set(courseStudents.map(s => s.year))]
     .sort((a, b) => a - b)
     .map(y => ({ value: y, label: String(y) }));
+  const batchOptions = [...new Set(courseStudents.map(s => s.batchName))]
+    .sort()
+    .map(b => ({ value: b, label: b }));
 
   const visibleStudents = courseStudents.filter(
     s =>
+      (!batch || s.batchName === batch) &&
       (!month || s.month === Number(month)) &&
       (!year || s.year === Number(year))
   );
@@ -67,6 +106,12 @@ export default function CourseStudentsPage() {
               <>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-3">
                   <FilterSelect
+                    label="Batch"
+                    value={batch}
+                    onChange={setBatch}
+                    options={batchOptions}
+                  />
+                  <FilterSelect
                     label="Month"
                     value={month}
                     onChange={setMonth}
@@ -79,9 +124,10 @@ export default function CourseStudentsPage() {
                     options={yearOptions}
                   />
                 </div>
-                {(month || year) && (
+                {(batch || month || year) && (
                   <button
                     onClick={() => {
+                      setBatch('');
                       setMonth('');
                       setYear('');
                     }}
@@ -115,7 +161,7 @@ export default function CourseStudentsPage() {
                 {courseStudents.length === 0 ? (
                   <p>No students enrolled in this course yet.</p>
                 ) : visibleStudents.length === 0 ? (
-                  <p>No students for this month and year.</p>
+                  <p>No students match these filters.</p>
                 ) : (
                   <div className="overflow-x-auto bg-white border border-slate-200 rounded-xl">
                     <table className="min-w-full text-sm text-left">

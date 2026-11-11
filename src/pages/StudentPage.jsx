@@ -13,12 +13,12 @@ import {
 } from '../constants/statuses';
 import { useAuth } from '../context/AuthContext';
 import { applyPlacementRule } from '../utils/studentRules';
-import { COURSES } from '../constants/courses';
 import CellSelect from '../components/common/CellSelect';
 import { isEligible } from '../utils/eligibility';
 import FilterSelect from '../components/common/FilterSelect';
 import StudentFormModal from '../components/students/StudentFormModal';
-import { SquarePen } from 'lucide-react';
+import SwitchBatchModal from '../components/students/SwitchBatchModal';
+import { SquarePen, ArrowRightLeft } from 'lucide-react';
 const EMPTY_FILTERS = {
   batch: '',
   courseStatus: '',
@@ -27,7 +27,6 @@ const EMPTY_FILTERS = {
   project: '',
   placementStatus: '',
 };
-const COURSE_OPTIONS = COURSES.map(c => ({ value: c, label: c }));
 
 const withCurrent = (options, current) =>
   options.some(o => o.value === current)
@@ -44,6 +43,9 @@ export default function StudentPage() {
   const [rowError, setRowError] = useState(null);
   const [savingId, setSavingId] = useState(null);
   const [search, setSearch] = useState('');
+
+  const [switchingStudent, setSwitchingStudent] = useState(null);
+
   const query = search.trim().toLowerCase();
   const openAdd = () => {
     setEditingStudent(null);
@@ -130,6 +132,19 @@ export default function StudentPage() {
                   : [saved, ...prev]
               );
               closeForm();
+            }}
+          />
+        )}
+
+        {switchingStudent && (
+          <SwitchBatchModal
+            student={switchingStudent}
+            onClose={() => setSwitchingStudent(null)}
+            onSaved={updated => {
+              setStudents(prev =>
+                prev.map(s => (s.id === updated.id ? updated : s))
+              );
+              setSwitchingStudent(null);
             }}
           />
         )}
@@ -243,17 +258,7 @@ export default function StudentPage() {
                   <tr key={student.id} className="hover:bg-slate-50">
                     <td className="px-3 py-2">{index + 1}</td>
                     <td className="px-3 py-2 font-medium">{student.name}</td>
-                    <td className="px-3 py-2">
-                      <CellSelect
-                        label="Course"
-                        value={student.course}
-                        options={withCurrent(COURSE_OPTIONS, student.course)}
-                        disabled={savingId === student.id}
-                        onChange={v =>
-                          handleFieldChange(student, { course: v })
-                        }
-                      />
-                    </td>
+                    <td className="px-3 py-2">{student.course}</td>
                     <td className="px-3 py-2">{student.batchName}</td>
                     <td className="px-3 py-2">
                       <CellSelect
@@ -367,14 +372,24 @@ export default function StudentPage() {
                       })}
                     </td>
                     <td className="px-3 py-2">
-                      <button
-                        onClick={() => openEdit(student)}
-                        aria-label={`Edit ${student.name}`}
-                        title="Edit"
-                        className="text-blue-600 hover:text-blue-800 p-1 rounded hover:bg-blue-50"
-                      >
-                        <SquarePen className="w-4 h-4" />
-                      </button>
+                      <div className="flex items-center gap-1">
+                        <button
+                          onClick={() => openEdit(student)}
+                          aria-label={`Edit ${student.name}`}
+                          title="Edit"
+                          className="text-blue-600 hover:text-blue-800 p-1 rounded hover:bg-blue-50"
+                        >
+                          <SquarePen className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => setSwitchingStudent(student)}
+                          aria-label={`Switch batch for ${student.name}`}
+                          title="Switch batch"
+                          className="text-blue-600 hover:text-blue-800 p-1 rounded hover:bg-blue-50"
+                        >
+                          <ArrowRightLeft className="w-4 h-4" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}

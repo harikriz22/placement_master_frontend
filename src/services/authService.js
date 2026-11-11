@@ -70,11 +70,7 @@ export function validatePassword(password) {
   return { valid: true };
 }
 
-/**
- * Member Registration (A1, A2, A4)
- */
 export async function registerMember({ name, email, password }) {
-  // 1. Validate required fields
   if (!name?.trim()) {
     throw new Error('Please enter your full name.');
   }
@@ -93,7 +89,6 @@ export async function registerMember({ name, email, password }) {
     throw new Error(passwordCheck.message);
   }
 
-  // 4. Validate Email Uniqueness (A2)
   const members = getStoredMembers();
   const emailExists = members.some(m => m.email.toLowerCase() === cleanEmail);
   if (emailExists) {
@@ -102,7 +97,6 @@ export async function registerMember({ name, email, password }) {
     );
   }
 
-  // 5. Store password hashed (A4)
   const password_hash = await hashPassword(password);
   const newMember = {
     id: Date.now(),
@@ -115,7 +109,6 @@ export async function registerMember({ name, email, password }) {
   members.push(newMember);
   localStorage.setItem(STORAGE_USERS_KEY, JSON.stringify(members));
 
-  // Safe user object (passwords are never returned - A4)
   const safeUser = {
     id: newMember.id,
     name: newMember.name,
@@ -123,7 +116,6 @@ export async function registerMember({ name, email, password }) {
     created_at: newMember.created_at,
   };
 
-  // Generate session token
   const fakeToken = 'token_' + btoa(`${safeUser.id}:${Date.now()}`);
   localStorage.setItem(STORAGE_CURRENT_USER_KEY, JSON.stringify(safeUser));
   localStorage.setItem(STORAGE_TOKEN_KEY, fakeToken);
@@ -139,7 +131,6 @@ export async function loginMember({ email, password }) {
   const cleanEmail = email.trim().toLowerCase();
   const members = getStoredMembers();
 
-  // Find member
   const member = members.find(m => m.email.toLowerCase() === cleanEmail);
   if (!member) {
     throw new Error('Invalid email or password.');

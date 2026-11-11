@@ -116,3 +116,7 @@ export const YEARS = [thisYear - 1, thisYear, thisYear + 1].map(y => ({
 
 export const labelOf = (list, value) =>
   list.find(item => item.value === value)?.label ?? value;
+
+export const BATCH_SWITCH_STATUS = COURSE_STATUS.filter(s =>
+  s.value.startsWith('bs_')
+);

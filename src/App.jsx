@@ -1,14 +1,13 @@
-import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DashboardPreview from './pages/DashboardPreview';
-import PlaceholderPage from './pages/PlaceholderPage';
 import StudentPage from './pages/StudentPage';
 import BatchPage from './pages/BatchPage';
 import CourseStudentsPage from './pages/CourseStudentsPage';
+import BatchSwitchPage from './pages/BatchSwitchPage';
 
 export default function App() {
   return (
@@ -57,16 +56,11 @@ export default function App() {
             path="/batch-switch"
             element={
               <ProtectedRoute>
-                <PlaceholderPage
-                  title="Batch Switch Audit Log"
-                  section="Batch Switch Page"
-                  description="Table of all student batch switches, newest first, with previous and new batch tracking."
-                />
+                <BatchSwitchPage />
               </ProtectedRoute>
             }
           />
 
-          {/* Fallback */}
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>

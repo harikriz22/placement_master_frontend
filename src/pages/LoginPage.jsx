@@ -31,7 +31,7 @@ export default function LoginPage() {
 
   const handleChange = e => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value })); //computed property name to update the correct field
+    setFormData(prev => ({ ...prev, [name]: value }));
     if (error) setError('');
   };
 
