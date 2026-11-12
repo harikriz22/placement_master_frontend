@@ -116,7 +116,7 @@ export default function StudentPage() {
           <h1 className="text-2xl font-bold text-slate-900 mb-1">Students</h1>
           <button
             onClick={openAdd}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-500"
+            className="px-4 py-2 bg-gradient-to-tr from-red-500 via-orange-500 to-red-500 text-white rounded-lg text-sm font-semibold hover:bg-orange-500"
           >
             Add Student
           </button>
@@ -164,7 +164,7 @@ export default function StudentPage() {
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 placeholder="Search by student name"
-                className="w-full sm:w-80 border border-slate-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full sm:w-80 border border-slate-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-orange-500"
               />
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-4">
@@ -211,7 +211,7 @@ export default function StudentPage() {
                   setFilters(EMPTY_FILTERS);
                   setSearch('');
                 }}
-                className="text-sm text-blue-600 hover:underline mb-3"
+                className="text-sm text-cyan-800 hover:underline mb-3"
               >
                 Clear filters
               </button>
@@ -232,7 +232,7 @@ export default function StudentPage() {
         {!loading && !error && filteredStudents.length > 0 && (
           <div className="overflow-x-auto bg-white border border-slate-200 rounded-xl">
             <table className="min-w-full text-sm text-left">
-              <thead className="bg-slate-100 text-slate-600">
+              <thead className="bg-orange-950 text-white">
                 <tr>
                   <th className="px-3 py-2 font-semibold">Sl. No</th>
                   <th className="px-3 py-2 font-semibold">Name</th>
@@ -255,7 +255,7 @@ export default function StudentPage() {
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {filteredStudents.map((student, index) => (
-                  <tr key={student.id} className="hover:bg-slate-50">
+                  <tr key={student.id} className="hover:bg-amber-100">
                     <td className="px-3 py-2">{index + 1}</td>
                     <td className="px-3 py-2 font-medium">{student.name}</td>
                     <td className="px-3 py-2">{student.course}</td>
@@ -271,7 +271,7 @@ export default function StudentPage() {
                         }
                       />
                     </td>
-                    <td className="px-3 py-2">
+                    <td className="px-3 py-2 ">
                       <CellSelect
                         label="Year"
                         value={student.year}
@@ -330,7 +330,7 @@ export default function StudentPage() {
                         className={`px-2 py-0.5 rounded-full text-xs font-semibold ${
                           isEligible(student)
                             ? 'bg-emerald-100 text-emerald-700'
-                            : 'bg-amber-100 text-amber-700'
+                            : 'bg-red-100 text-red-700'
                         }`}
                       >
                         {isEligible(student) ? 'Yes' : 'No'}
@@ -377,7 +377,7 @@ export default function StudentPage() {
                           onClick={() => openEdit(student)}
                           aria-label={`Edit ${student.name}`}
                           title="Edit"
-                          className="text-blue-600 hover:text-blue-800 p-1 rounded hover:bg-blue-50"
+                          className="text-cyan-800 hover:text-blue-800 p-1 rounded hover:bg-blue-50"
                         >
                           <SquarePen className="w-4 h-4" />
                         </button>
@@ -385,7 +385,7 @@ export default function StudentPage() {
                           onClick={() => setSwitchingStudent(student)}
                           aria-label={`Switch batch for ${student.name}`}
                           title="Switch batch"
-                          className="text-blue-600 hover:text-blue-800 p-1 rounded hover:bg-blue-50"
+                          className="text-pink-600 hover:text-rose-800 p-1 rounded hover:bg-blue-50"
                         >
                           <ArrowRightLeft className="w-4 h-4" />
                         </button>

@@ -11,7 +11,7 @@ export default function BatchPage() {
       <Navbar />
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 py-8">
         <h1 className="text-2xl font-bold text-slate-900 mb-1">Courses</h1>
-        <p className="text-sm text-slate-500 mb-6">
+        <p className="text-sm text-amber-700 mb-6">
           Select a course to see its students.
         </p>
 
@@ -26,12 +26,10 @@ export default function BatchPage() {
                 <Link
                   key={course}
                   to={`/batches/${encodeURIComponent(course)}`}
-                  className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm hover:shadow-md hover:border-blue-300 transition"
+                  className=" bg-gradient-to-tr from-orange-400 to-yellow-200 border border-slate-200 rounded-xl p-5 shadow-sm hover:shadow-md hover:border-blue-300 transition"
                 >
                   <h2 className="text-lg font-bold text-slate-900">{course}</h2>
-                  <p className="text-sm text-slate-500 mt-1">
-                    {count} students
-                  </p>
+                  <p className="text-sm  mt-1">{count} students</p>
                 </Link>
               );
             })}
