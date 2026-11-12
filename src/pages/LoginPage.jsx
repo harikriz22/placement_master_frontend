@@ -85,7 +85,11 @@ export default function LoginPage() {
               <div className="flex-1 font-medium">{error}</div>
             </div>
           )}
-
+          {location.state?.registered && (
+            <div className="mb-6 p-3.5 bg-emerald-950/60 border border-emerald-800 text-emerald-200 text-sm rounded-xl">
+              Account created. Please log in.
+            </div>
+          )}
           <form onSubmit={handleSubmit} className="space-y-5" noValidate>
             <div>
               <label

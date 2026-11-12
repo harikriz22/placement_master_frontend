@@ -65,7 +65,10 @@ export default function RegisterPage() {
         email: formData.email,
         password: formData.password,
       });
-      navigate('/dashboard', { replace: true });
+      navigate('/login', {
+        replace: true,
+        state: { registered: true, email: formData.email },
+      });
     } catch (err) {
       setError(
         err.message || 'Registration failed. Please check your details.'

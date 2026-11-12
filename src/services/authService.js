@@ -116,11 +116,7 @@ export async function registerMember({ name, email, password }) {
     created_at: newMember.created_at,
   };
 
-  const fakeToken = 'token_' + btoa(`${safeUser.id}:${Date.now()}`);
-  localStorage.setItem(STORAGE_CURRENT_USER_KEY, JSON.stringify(safeUser));
-  localStorage.setItem(STORAGE_TOKEN_KEY, fakeToken);
-
-  return { user: safeUser, token: fakeToken };
+  return { user: safeUser };
 }
 
 export async function loginMember({ email, password }) {

@@ -40,8 +40,7 @@ export function AuthProvider({ children }) {
     setLoading(true);
     try {
       const res = await registerMember({ name, email, password });
-      setUser(res.user);
-      setToken(res.token);
+
       return res.user;
     } finally {
       setLoading(false);
