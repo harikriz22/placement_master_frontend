@@ -49,7 +49,14 @@ export default function LoginPage() {
       await login(formData.email, formData.password);
       navigate(from, { replace: true });
     } catch (err) {
-      setError(err.message || 'Login failed. Invalid credentials.');
+      const responseData = err.response?.data;
+
+      setError(
+        responseData?.detail ||
+        responseData?.message ||
+        err.message ||
+        'Login failed. Invalid credentials.'
+      );
     } finally {
       setIsSubmitting(false);
     }

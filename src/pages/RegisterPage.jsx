@@ -21,6 +21,7 @@ export default function RegisterPage() {
     name: '',
     email: '',
     password: '',
+    invite_code: '',
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -64,14 +65,25 @@ export default function RegisterPage() {
         name: formData.name,
         email: formData.email,
         password: formData.password,
+        invite_code: formData.invite_code,
       });
       navigate('/login', {
         replace: true,
         state: { registered: true, email: formData.email },
       });
     } catch (err) {
+      const responseData = err.response?.data;
+
+      const errorMessage =
+        responseData?.detail ||
+        responseData?.message ||
+        responseData?.email?.[0] ||
+        responseData?.password?.[0] ||
+        responseData?.invite_code?.[0] ||
+        responseData?.name?.[0];
+
       setError(
-        err.message || 'Registration failed. Please check your details.'
+        errorMessage || 'Registration failed. Please check your details.'
       );
     } finally {
       setIsSubmitting(false);
@@ -159,6 +171,26 @@ export default function RegisterPage() {
                   className="block w-full pl-10 pr-3.5 py-2.5 bg-slate-900/80 border border-slate-700 rounded-xl text-white placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                 />
               </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="register-invite-code"
+                className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5"
+              >
+                Invite Code
+              </label>
+
+              <input
+                id="register-invite-code"
+                name="invite_code"
+                type="text"
+                required
+                placeholder="Enter your invite code"
+                value={formData.invite_code}
+                onChange={handleChange}
+                className="block w-full px-3.5 py-2.5 bg-slate-900/80 border border-slate-700 rounded-xl text-white placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+              />
             </div>
 
             <div>

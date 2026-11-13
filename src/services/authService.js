@@ -1,170 +1,128 @@
-const STORAGE_USERS_KEY = 'placement_tracker_members';
-const STORAGE_CURRENT_USER_KEY = 'placement_tracker_session_user';
+import api from './api';
+
 const STORAGE_TOKEN_KEY = 'placement_tracker_auth_token';
 
-const COMMON_PASSWORDS = [
-  'password',
-  'password1',
-  '12345678',
-  '123456789',
-  'qwerty123',
-  'admin123',
-  'welcome1',
-  'placement',
-  'letmein1',
-  'secret123',
-];
-
-async function hashPassword(password) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(password + '_placement_salt');
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-}
-
-async function initMembers() {
-  const existing = localStorage.getItem(STORAGE_USERS_KEY);
-  if (!existing) {
-    const demoPasswordHash = await hashPassword('CellAdmin2026!');
-    const initialMembers = [
-      {
-        id: 1,
-        name: 'Sarah Connor',
-        email: 'sarah.connor@placement.cell',
-        password_hash: demoPasswordHash,
-        created_at: new Date().toISOString(),
-      },
-    ];
-    localStorage.setItem(STORAGE_USERS_KEY, JSON.stringify(initialMembers));
-  }
-}
-
-initMembers();
-
-function getStoredMembers() {
-  try {
-    const data = localStorage.getItem(STORAGE_USERS_KEY);
-    return data ? JSON.parse(data) : [];
-  } catch {
-    return [];
-  }
-}
-
-export function validatePassword(password) {
-  if (!password || password.length < 8) {
-    return {
-      valid: false,
-      message: 'Password must be at least 8 characters long.',
-    };
-  }
-  if (/^\d+$/.test(password)) {
-    return { valid: false, message: 'Password cannot be all-numeric.' };
-  }
-  if (COMMON_PASSWORDS.includes(password.toLowerCase())) {
-    return {
-      valid: false,
-      message: 'This password is too common and easily guessed.',
-    };
-  }
-  return { valid: true };
-}
-
-export async function registerMember({ name, email, password }) {
-  if (!name?.trim()) {
-    throw new Error('Please enter your full name.');
-  }
-  if (!email?.trim()) {
-    throw new Error('Please enter your email address.');
-  }
-  const cleanEmail = email.trim().toLowerCase();
-
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(cleanEmail)) {
-    throw new Error('Please enter a valid email address.');
-  }
-
-  const passwordCheck = validatePassword(password);
-  if (!passwordCheck.valid) {
-    throw new Error(passwordCheck.message);
-  }
-
-  const members = getStoredMembers();
-  const emailExists = members.some(m => m.email.toLowerCase() === cleanEmail);
-  if (emailExists) {
-    throw new Error(
-      'An account with this email address already exists. Please log in.'
-    );
-  }
-
-  const password_hash = await hashPassword(password);
-  const newMember = {
-    id: Date.now(),
+// Register member
+export async function registerMember({
+  name,
+  email,
+  password,
+  invite_code,
+}) {
+  const response = await api.post('/auth/register/', {
     name: name.trim(),
-    email: cleanEmail,
-    password_hash,
-    created_at: new Date().toISOString(),
-  };
+    email: email.trim().toLowerCase(),
+    password,
+    invite_code,
+  });
 
-  members.push(newMember);
-  localStorage.setItem(STORAGE_USERS_KEY, JSON.stringify(members));
-
-  const safeUser = {
-    id: newMember.id,
-    name: newMember.name,
-    email: newMember.email,
-    created_at: newMember.created_at,
-  };
-
-  return { user: safeUser };
+  return response.data;
 }
 
+// Login member
 export async function loginMember({ email, password }) {
-  if (!email?.trim() || !password) {
-    throw new Error('Please provide both email and password.');
-  }
+  const response = await api.post(
+    '/auth/login/',
+    {
+      email: email.trim().toLowerCase(),
+      password,
+    },
+    {
+      withCredentials: true,
+    }
+  );
 
-  const cleanEmail = email.trim().toLowerCase();
-  const members = getStoredMembers();
+  const { access, member } = response.data.data;
 
-  const member = members.find(m => m.email.toLowerCase() === cleanEmail);
-  if (!member) {
-    throw new Error('Invalid email or password.');
-  }
+  localStorage.setItem(STORAGE_TOKEN_KEY, access);
 
-  const inputHash = await hashPassword(password);
-  if (member.password_hash !== inputHash) {
-    throw new Error('Invalid email or password.');
-  }
-
-  const safeUser = {
-    id: member.id,
-    name: member.name,
-    email: member.email,
-    created_at: member.created_at,
+  return {
+    user: member,
+    token: access,
   };
-
-  const fakeToken = 'token_' + btoa(`${safeUser.id}:${Date.now()}`);
-  localStorage.setItem(STORAGE_CURRENT_USER_KEY, JSON.stringify(safeUser));
-  localStorage.setItem(STORAGE_TOKEN_KEY, fakeToken);
-
-  return { user: safeUser, token: fakeToken };
 }
 
-export function getCurrentUser() {
+// Get current logged-in member
+export async function getCurrentUser() {
+  let token = getAuthToken();
+
+  if (!token) {
+    throw new Error('No authentication token found.');
+  }
+
   try {
-    const raw = localStorage.getItem(STORAGE_CURRENT_USER_KEY);
-    return raw ? JSON.parse(raw) : null;
-  } catch {
-    return null;
+    const response = await api.get('/auth/me/', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data.data;
+
+  } catch (error) {
+    if (error.response?.status !== 401) {
+      throw error;
+    }
+
+    // Access token expired. Try refreshing it.
+    token = await refreshAccessToken();
+
+    // Retry current user request with the new token.
+    const response = await api.get('/auth/me/', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data.data;
   }
 }
 
+// Get stored access token
 export function getAuthToken() {
   return localStorage.getItem(STORAGE_TOKEN_KEY);
 }
 
-export function logoutMember() {
-  localStorage.removeItem(STORAGE_CURRENT_USER_KEY);
+// Refresh access token
+export async function refreshAccessToken() {
+  const response = await api.post(
+    '/auth/refresh/',
+    {},
+    {
+      withCredentials: true,
+    }
+  );
+
+  const newAccessToken = response.data.data.access;
+
+  localStorage.setItem(STORAGE_TOKEN_KEY, newAccessToken);
+
+  return newAccessToken;
+}
+
+// Logout member
+export async function logoutMember() {
+  try {
+    const token = getAuthToken();
+
+    if (token) {
+      await api.post(
+        '/auth/logout/',
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        }
+      );
+    }
+  } finally {
+    localStorage.removeItem(STORAGE_TOKEN_KEY);
+  }
+}
+
+// Clear authentication data
+export function clearAuthData() {
   localStorage.removeItem(STORAGE_TOKEN_KEY);
 }

@@ -1,10 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+
 import {
   getCurrentUser,
   getAuthToken,
   loginMember,
   registerMember,
   logoutMember,
+  clearAuthData,
 } from '../services/authService';
 
 const AuthContext = createContext(null);
@@ -14,43 +16,76 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Check authentication when the application starts
   useEffect(() => {
-    const existingUser = getCurrentUser();
-    const existingToken = getAuthToken();
-    if (existingUser && existingToken) {
-      setUser(existingUser);
-      setToken(existingToken);
-    }
-    setLoading(false);
+    const checkAuthentication = async () => {
+      const existingToken = getAuthToken();
+
+      if (!existingToken) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        // This also refreshes the token if it has expired
+        const currentUser = await getCurrentUser();
+
+        setUser(currentUser);
+        setToken(getAuthToken());
+      } catch (error) {
+        clearAuthData();
+        setUser(null);
+        setToken(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkAuthentication();
   }, []);
 
+  // Login
   const login = async (email, password) => {
     setLoading(true);
+
     try {
       const res = await loginMember({ email, password });
+
       setUser(res.user);
       setToken(res.token);
+
       return res.user;
     } finally {
       setLoading(false);
     }
   };
 
-  const register = async ({ name, email, password }) => {
+  // Register
+  const register = async ({ name, email, password, invite_code }) => {
     setLoading(true);
-    try {
-      const res = await registerMember({ name, email, password });
 
-      return res.user;
+    try {
+      const res = await registerMember({
+        name,
+        email,
+        password,
+        invite_code,
+      });
+
+      return res;
     } finally {
       setLoading(false);
     }
   };
 
-  const logout = () => {
-    logoutMember();
-    setUser(null);
-    setToken(null);
+  // Logout
+  const logout = async () => {
+    try {
+      await logoutMember();
+    } finally {
+      setUser(null);
+      setToken(null);
+    }
   };
 
   const value = {
@@ -63,13 +98,19 @@ export function AuthProvider({ children }) {
     logout,
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {
   const context = useContext(AuthContext);
+
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
+
   return context;
 }

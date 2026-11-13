@@ -1,22 +1,34 @@
 import Navbar from '../components/common/Navbar';
 import { useBatchSwitches } from '../hooks/useBatchSwitches';
-import { MONTHS, labelOf } from '../constants/statuses';
+
 const COLUMNS = [
   { header: 'Name', render: r => r.studentName },
   { header: 'Email', render: r => r.email },
+
   { header: 'Old Course', render: r => r.oldCourse },
-  { header: 'Old Batch', render: r => r.oldBatch },
+  {
+    header: 'Old Batch',
+    render: r => `Batch ${r.oldBatch}`,
+  },
+
   { header: 'New Course', render: r => r.newCourse },
-  { header: 'New Batch', render: r => r.newBatch },
+  {
+    header: 'New Batch',
+    render: r => `Batch ${r.newBatch}`,
+  },
+
   {
     header: 'Old Month',
-    render: r => `${labelOf(MONTHS, r.oldMonth)} ${r.oldYear}`,
+    render: r => `${r.oldMonth} ${r.oldYear}`,
   },
   {
     header: 'New Month',
-    render: r => `${labelOf(MONTHS, r.newMonth)} ${r.newYear}`,
+    render: r => `${r.newMonth} ${r.newYear}`,
   },
-  { header: 'Switched By', render: r => r.switchedBy },
+
+  { header: 'Reason', render: r => r.reason || '-' },
+  { header: 'Switched By', render: r => r.switchedBy || '-' },
+
   {
     header: 'Switched On',
     render: r =>
