@@ -85,8 +85,12 @@ export default function RegisterPage() {
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
         <div className="flex justify-center">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white shadow-xl shadow-blue-500/25 ring-4 ring-blue-500/20">
-            <GraduationCap className="w-8 h-8" />
+          <div className="w-10 h-10 shadow-xl shadow-blue-500/25 ring-4 ring-blue-500/20 rounded-lg overflow-hidden flex items-center justify-center">
+            <img
+              src="https://lscdn.azureedge.net/biz-live/img/photos-11122501-16318942603657166.jpeg"
+              alt="Techmindz Logo"
+              className="w-full h-full object-cover "
+            />
           </div>
         </div>
         <h1 className="mt-4 text-center text-2xl sm:text-3xl font-extrabold tracking-tight text-white">

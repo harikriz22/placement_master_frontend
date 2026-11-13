@@ -83,20 +83,20 @@ export default function SwitchBatchModal({ student, onSaved, onClose }) {
         noValidate
         className="bg-white rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-6"
       >
-        <h2 className="text-lg font-bold mb-1">Switch batch</h2>
+        <h2 className="text-lg font-bold mb-1 ">Switch batch</h2>
         <p className="text-sm text-slate-500 mb-4">{student.name}</p>
 
-        <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 mb-4 text-sm">
+        <div className="bg-slate-300 border border-grey-200 rounded-lg p-3 mb-4 text-sm">
           <p>
-            <span className="text-slate-500">Current course:</span>{' '}
+            <span className="text-slate-700">Current course:</span>{' '}
             {student.course}
           </p>
           <p>
-            <span className="text-slate-500">Current batch:</span>{' '}
+            <span className="text-slate-700">Current batch:</span>{' '}
             {student.batchName}
           </p>
           <p>
-            <span className="text-slate-500">Current month:</span>{' '}
+            <span className="text-slate-700">Current month:</span>{' '}
             {labelOf(MONTHS, student.month)} {student.year}
           </p>
         </div>

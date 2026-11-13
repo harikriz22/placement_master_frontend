@@ -31,16 +31,30 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-indigo-500/20">
-              <GraduationCap className="w-6 h-6" />
-            </div>
-            <div>
-              <span className="text-lg font-bold text-white tracking-tight">
-                Placement Tracker
-              </span>
-              <span className="hidden sm:inline-block ml-2 px-2 py-0.5 text-xs font-semibold bg-orange-900/60 text-orange-300 rounded border border-orange-700/50">
-                Cell Portal
-              </span>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 shadow-xl shadow-blue-500/25 ring-4 ring-blue-500/20 rounded-lg overflow-hidden flex items-center justify-center">
+                <img
+                  src="https://lscdn.azureedge.net/biz-live/img/photos-11122501-16318942603657166.jpeg"
+                  alt="Techmindz Logo"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              <div className="flex items-center gap-2">
+                <div className="flex flex-col">
+                  <span className="text-lg font-bold text-white leading-none">
+                    Techmindz
+                  </span>
+
+                  <span className="text-xs text-slate-300 tracking-tight leading-none mt-1">
+                    Embrace the future
+                  </span>
+                </div>
+
+                <span className="hidden sm:inline-block px-2 py-0.5 text-xs font-semibold bg-orange-900/60 text-orange-300 rounded border border-orange-700/50">
+                  Cell Portal
+                </span>
+              </div>
             </div>
           </div>
 

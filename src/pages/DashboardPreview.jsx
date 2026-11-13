@@ -151,7 +151,7 @@ export default function DashboardPreview() {
             return (
               <div
                 key={idx}
-                className="bg-white rounded-xl p-5 border border-slate-200/90 shadow-sm hover:shadow-md hover:border-blue-300 transition cursor-pointer group"
+                className="bg-white rounded-xl p-5 border border-slate-200/90 shadow-sm hover:shadow-md hover:border-red-300 transition cursor-pointer group"
               >
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-xs font-medium px-2 py-0.5 rounded bg-slate-100 text-slate-600 group-hover:bg-red-50 group-hover:text-red-700 transition">

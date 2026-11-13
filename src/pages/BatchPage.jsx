@@ -26,9 +26,9 @@ export default function BatchPage() {
                 <Link
                   key={course}
                   to={`/batches/${encodeURIComponent(course)}`}
-                  className=" bg-gradient-to-tr from-orange-400 to-yellow-200 border border-slate-200 rounded-xl p-5 shadow-sm hover:shadow-md hover:border-blue-300 transition"
+                  className=" bg-gradient-to-tr from-indigo-950 via-slate-950 to-indigo-950 border border-grey-200 rounded-xl p-5 shadow-sm hover:shadow-md hover:border-blue-300 transition text-slate-300"
                 >
-                  <h2 className="text-lg font-bold text-slate-900">{course}</h2>
+                  <h2 className="text-lg font-bold text-slate-300">{course}</h2>
                   <p className="text-sm  mt-1">{count} students</p>
                 </Link>
               );
