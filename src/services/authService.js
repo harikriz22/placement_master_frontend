@@ -23,25 +23,6 @@ async function hashPassword(password) {
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-async function initMembers() {
-  const existing = localStorage.getItem(STORAGE_USERS_KEY);
-  if (!existing) {
-    const demoPasswordHash = await hashPassword('CellAdmin2026!');
-    const initialMembers = [
-      {
-        id: 1,
-        name: 'Sarah Connor',
-        email: 'sarah.connor@placement.cell',
-        password_hash: demoPasswordHash,
-        created_at: new Date().toISOString(),
-      },
-    ];
-    localStorage.setItem(STORAGE_USERS_KEY, JSON.stringify(initialMembers));
-  }
-}
-
-initMembers();
-
 function getStoredMembers() {
   try {
     const data = localStorage.getItem(STORAGE_USERS_KEY);
