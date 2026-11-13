@@ -20,44 +20,44 @@ export default function App() {
           <Route
             path="/dashboard"
             element={
-              <ProtectedRoute>
-                <DashboardPreview />
-              </ProtectedRoute>
+              // <ProtectedRoute>
+              <DashboardPreview />
+              // </ProtectedRoute>
             }
           />
 
           <Route
             path="/students"
             element={
-              <ProtectedRoute>
-                <StudentPage />
-              </ProtectedRoute>
+              // <ProtectedRoute>
+              <StudentPage />
+              // </ProtectedRoute>
             }
           />
 
           <Route
             path="/batches"
             element={
-              <ProtectedRoute>
-                <BatchPage />
-              </ProtectedRoute>
+              // <ProtectedRoute>
+              <BatchPage />
+              // </ProtectedRoute>
             }
           />
           <Route
             path="/batches/:course"
             element={
-              <ProtectedRoute>
-                <CourseStudentsPage />
-              </ProtectedRoute>
+              // <ProtectedRoute>
+              <CourseStudentsPage />
+              // </ProtectedRoute>
             }
           />
 
           <Route
             path="/batch-switch"
             element={
-              <ProtectedRoute>
-                <BatchSwitchPage />
-              </ProtectedRoute>
+              // <ProtectedRoute>
+              <BatchSwitchPage />
+              // </ProtectedRoute>
             }
           />
 

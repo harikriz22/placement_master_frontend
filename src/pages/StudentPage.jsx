@@ -94,9 +94,7 @@ export default function StudentPage() {
   }, []);
 
   // Get batch details using student's batch ID
-  const batchMap = new Map(
-    batches.map(batch => [String(batch.id), batch])
-  );
+  const batchMap = new Map(batches.map(batch => [String(batch.id), batch]));
 
   const getStudentBatch = student => {
     return batchMap.get(String(student.batch));
@@ -112,23 +110,20 @@ export default function StudentPage() {
   const query = search.trim().toLowerCase();
 
   const filteredStudents = students.filter(student => {
-    const matchesSearch =
-      !query || student.name.toLowerCase().includes(query);
+    const matchesSearch = !query || student.name.toLowerCase().includes(query);
 
     const matchesBatch =
       !filters.batch || String(student.batch) === filters.batch;
 
     const matchesCourseStatus =
-      !filters.courseStatus ||
-      student.courseStatus === filters.courseStatus;
+      !filters.courseStatus || student.courseStatus === filters.courseStatus;
 
     const matchesEligibility =
       !filters.eligible ||
       isEligible(student) === (filters.eligible === 'true');
 
     const matchesFee =
-      !filters.fee ||
-      student.feeCompleted === (filters.fee === 'yes');
+      !filters.fee || student.feeCompleted === (filters.fee === 'yes');
 
     const matchesProject =
       !filters.project ||
@@ -149,8 +144,7 @@ export default function StudentPage() {
     );
   });
 
-  const hasFilters =
-    Object.values(filters).some(Boolean) || query !== '';
+  const hasFilters = Object.values(filters).some(Boolean) || query !== '';
 
   // Update student field
   const handleFieldChange = async (student, changes) => {
@@ -159,9 +153,7 @@ export default function StudentPage() {
     try {
       const saved = await updateStudent(student.id, changes);
 
-      setStudents(prev =>
-        prev.map(s => (s.id === saved.id ? saved : s))
-      );
+      setStudents(prev => prev.map(s => (s.id === saved.id ? saved : s)));
 
       setRowError(null);
     } catch (err) {
@@ -178,9 +170,7 @@ export default function StudentPage() {
       const exists = prev.some(student => student.id === saved.id);
 
       if (exists) {
-        return prev.map(student =>
-          student.id === saved.id ? saved : student
-        );
+        return prev.map(student => (student.id === saved.id ? saved : student));
       }
 
       return [saved, ...prev];
@@ -191,20 +181,18 @@ export default function StudentPage() {
 
   // Handle batch switch save
   const handleBatchSwitchSaved = updated => {
-    const newBatch = batches.find(
-      batch => batch.id === updated.batch
-    );
+    const newBatch = batches.find(batch => batch.id === updated.batch);
 
     setStudents(prev =>
       prev.map(student =>
         student.id === updated.student_id
           ? {
-            ...student,
-            batch: updated.batch,
-            batchName: newBatch
-              ? `${newBatch.course} ${newBatch.month} ${newBatch.year} - ${newBatch.batch_number}`
-              : student.batchName,
-          }
+              ...student,
+              batch: updated.batch,
+              batchName: newBatch
+                ? `${newBatch.course} ${newBatch.month} ${newBatch.year} - ${newBatch.batch_number}`
+                : student.batchName,
+            }
           : student
       )
     );
@@ -217,16 +205,13 @@ export default function StudentPage() {
       <Navbar />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 py-8">
-
         {/* Page Header */}
         <div className="flex items-center justify-between mb-3">
-          <h1 className="text-2xl font-bold text-slate-900 mb-1">
-            Students
-          </h1>
+          <h1 className="text-2xl font-bold text-slate-900 mb-1">Students</h1>
 
           <button
             onClick={openAdd}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-500"
+            className="px-4 py-2 bg-gradient-to-tr from-red-500 via-orange-500 to-red-500 text-white rounded-lg text-sm font-semibold hover:bg-orange-500"
           >
             Add Student
           </button>
@@ -253,13 +238,9 @@ export default function StudentPage() {
         {/* Loading and Error */}
         {loading && <p>Loading students...</p>}
 
-        {error && (
-          <p className="text-red-500">{error}</p>
-        )}
+        {error && <p className="text-red-500">{error}</p>}
 
-        {!loading && !error && students.length === 0 && (
-          <p>No students yet.</p>
-        )}
+        {!loading && !error && students.length === 0 && <p>No students yet.</p>}
 
         {!loading && !error && students.length > 0 && (
           <>
@@ -275,13 +256,12 @@ export default function StudentPage() {
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 placeholder="Search by student name"
-                className="w-full sm:w-80 border border-slate-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full sm:w-80 border border-slate-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-orange-500"
               />
             </div>
 
             {/* Filters */}
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-4">
-
               <FilterSelect
                 label="Batch"
                 value={filters.batch}
@@ -323,7 +303,6 @@ export default function StudentPage() {
                 onChange={setFilter('placementStatus')}
                 options={PLACEMENT_STATUS}
               />
-
             </div>
 
             {/* Clear Filters */}
@@ -347,11 +326,7 @@ export default function StudentPage() {
         )}
 
         {/* Row Error */}
-        {rowError && (
-          <p className="text-red-500 text-sm mb-3">
-            {rowError}
-          </p>
-        )}
+        {rowError && <p className="text-red-500 text-sm mb-3">{rowError}</p>}
 
         {/* No Matching Students */}
         {!loading &&
@@ -365,8 +340,7 @@ export default function StudentPage() {
         {!loading && !error && filteredStudents.length > 0 && (
           <div className="overflow-x-auto bg-white border border-slate-200 rounded-xl">
             <table className="min-w-full text-sm text-left">
-
-              <thead className="bg-slate-100 text-slate-600">
+              <thead className="bg-orange-950 text-white">
                 <tr>
                   <th className="px-3 py-2 font-semibold">Sl. No</th>
                   <th className="px-3 py-2 font-semibold">Name</th>
@@ -389,36 +363,22 @@ export default function StudentPage() {
               </thead>
 
               <tbody className="divide-y divide-slate-100">
-
                 {filteredStudents.map((student, index) => {
                   const batch = getStudentBatch(student);
 
                   return (
-                    <tr key={student.id} className="hover:bg-slate-50">
+                    <tr key={student.id} className="hover:bg-amber-100">
+                      <td className="px-3 py-2">{index + 1}</td>
 
-                      <td className="px-3 py-2">
-                        {index + 1}
-                      </td>
+                      <td className="px-3 py-2 font-medium">{student.name}</td>
 
-                      <td className="px-3 py-2 font-medium">
-                        {student.name}
-                      </td>
+                      <td className="px-3 py-2">{batch?.course || '-'}</td>
 
-                      <td className="px-3 py-2">
-                        {batch?.course || '-'}
-                      </td>
+                      <td className="px-3 py-2">{student.batchName || '-'}</td>
 
-                      <td className="px-3 py-2">
-                        {student.batchName || '-'}
-                      </td>
+                      <td className="px-3 py-2">{batch?.month || '-'}</td>
 
-                      <td className="px-3 py-2">
-                        {batch?.month || '-'}
-                      </td>
-
-                      <td className="px-3 py-2">
-                        {batch?.year || '-'}
-                      </td>
+                      <td className="px-3 py-2">{batch?.year || '-'}</td>
 
                       <td className="px-3 py-2 whitespace-nowrap">
                         {student.phone}
@@ -476,10 +436,11 @@ export default function StudentPage() {
                       {/* Eligibility */}
                       <td className="px-3 py-2">
                         <span
-                          className={`px-2 py-0.5 rounded-full text-xs font-semibold ${isEligible(student)
+                          className={`px-2 py-0.5 rounded-full text-xs font-semibold ${
+                            isEligible(student)
                               ? 'bg-emerald-100 text-emerald-700'
-                              : 'bg-amber-100 text-amber-700'
-                            }`}
+                              : 'bg-red-100 text-red-700'
+                          }`}
                         >
                           {isEligible(student) ? 'Yes' : 'No'}
                         </span>
@@ -493,14 +454,13 @@ export default function StudentPage() {
                           options={
                             student.projectCompleted
                               ? PLACEMENT_STATUS.filter(
-                                option =>
-                                  option.value !== 'Project not completed'
-                              )
+                                  option =>
+                                    option.value !== 'Project not completed'
+                                )
                               : PLACEMENT_STATUS
                           }
                           disabled={
-                            !student.projectCompleted ||
-                            savingId === student.id
+                            !student.projectCompleted || savingId === student.id
                           }
                           onChange={v =>
                             handleFieldChange(student, {
@@ -527,25 +487,24 @@ export default function StudentPage() {
                       <td className="px-3 py-2 whitespace-nowrap">
                         {student.updatedAt
                           ? new Date(student.updatedAt).toLocaleDateString(
-                            'en-IN',
-                            {
-                              day: '2-digit',
-                              month: 'short',
-                              year: 'numeric',
-                            }
-                          )
+                              'en-IN',
+                              {
+                                day: '2-digit',
+                                month: 'short',
+                                year: 'numeric',
+                              }
+                            )
                           : '-'}
                       </td>
 
                       {/* Actions */}
                       <td className="px-3 py-2">
                         <div className="flex items-center gap-1">
-
                           <button
                             onClick={() => openEdit(student)}
                             aria-label={`Edit ${student.name}`}
                             title="Edit"
-                            className="text-blue-600 hover:text-blue-800 p-1 rounded hover:bg-blue-50"
+                            className="text-cyan-600 hover:text-blue-800 p-1 rounded hover:bg-blue-50"
                           >
                             <SquarePen className="w-4 h-4" />
                           </button>
@@ -554,23 +513,19 @@ export default function StudentPage() {
                             onClick={() => setSwitchingStudent(student)}
                             aria-label={`Switch batch for ${student.name}`}
                             title="Switch batch"
-                            className="text-blue-600 hover:text-blue-800 p-1 rounded hover:bg-blue-50"
+                            className="text-pink-600 hover:text-rose-800 p-1 rounded hover:bg-blue-50"
                           >
                             <ArrowRightLeft className="w-4 h-4" />
                           </button>
-
                         </div>
                       </td>
-
                     </tr>
                   );
                 })}
-
               </tbody>
             </table>
           </div>
         )}
-
       </main>
     </div>
   );

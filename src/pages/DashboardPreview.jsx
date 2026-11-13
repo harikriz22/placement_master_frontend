@@ -21,41 +21,53 @@ const metrics = [
     title: 'Total Enrolled',
     desc: 'Students registered across all batches',
     icon: Users,
-    badge: 'All Students',
+    iconBg: 'bg-blue-50',
+    iconColor: 'text-blue-600',
+    badge: 'All Active Batches',
   },
   {
     key: 'eligible',
     title: 'Placement Eligible',
     desc: 'Students meeting placement eligibility criteria',
     icon: UserCheck,
-    badge: 'Eligible Students',
+    iconBg: 'bg-emerald-50',
+    iconColor: 'text-emerald-600',
+    badge: 'All Eligible Students',
   },
   {
     key: 'notEligible',
     title: 'Not Eligible',
     desc: 'Students who have not met eligibility requirements',
     icon: UserX,
-    badge: 'Non-eligible Students',
+    iconBg: 'bg-amber-50',
+    iconColor: 'text-amber-600',
+    badge: 'All non-eligible Students',
   },
   {
     key: 'dropped',
     title: 'Discontinued',
     desc: 'Students who discontinued their training',
     icon: UserMinus,
+    iconBg: 'bg-rose-50',
+    iconColor: 'text-rose-600',
     badge: 'Dropped Students',
   },
   {
     key: 'batchSwitch',
     title: 'Batch Transfers',
-    desc: 'Students currently having a batch-switch status',
+    desc: 'Students who transferred between batches',
     icon: ArrowRightLeft,
-    badge: 'Batch Switch Students',
+    iconBg: 'bg-purple-50',
+    iconColor: 'text-purple-600',
+    badge: 'Batch Switch Students ',
   },
   {
     key: 'rejoined',
     title: 'Rejoined Students',
     desc: 'Students who resumed training',
     icon: RotateCcw,
+    iconBg: 'bg-cyan-50',
+    iconColor: 'text-cyan-600',
     badge: 'Resumed',
   },
   {
@@ -63,6 +75,8 @@ const metrics = [
     title: 'Successfully Placed',
     desc: 'Students who secured placement offers',
     icon: Award,
+    iconBg: 'bg-teal-50',
+    iconColor: 'text-teal-600',
     badge: 'Offers Secured',
   },
 ];
@@ -97,7 +111,7 @@ export default function DashboardPreview() {
       <Navbar />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 rounded-2xl p-6 sm:p-8 text-white shadow-xl border border-slate-800 mb-8 relative overflow-hidden">
+        <div className="bg-gradient-to-tr from-indigo-950 via-slate-950 to-indigo-950 rounded-2xl p-6 sm:p-8 text-white shadow-xl border border-slate-800 mb-8 relative overflow-hidden">
           <div className="absolute right-0 top-0 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
           <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -111,7 +125,7 @@ export default function DashboardPreview() {
                 Welcome back, {user?.name || 'Cell Member'}!
               </h1>
 
-              <p className="mt-1 text-sm text-slate-300 max-w-2xl">
+              <p className="mt-1 text-sm text-orange-300 max-w-2xl">
                 Placement Tracker MVP portal. Manage student eligibility,
                 monitor batch movements, and track placement progress from a
                 centralized dashboard.
@@ -119,13 +133,13 @@ export default function DashboardPreview() {
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm border border-white/10 rounded-xl p-3.5 text-xs text-slate-200 sm:text-right">
-              <p className="text-slate-400">Signed in as:</p>
+              <p className="text-lime-400">Signed in as:</p>
 
-              <p className="font-semibold text-white truncate">
+              <p className="font-semibold text-lime-100 truncate">
                 {user?.email}
               </p>
 
-              <p className="text-[11px] text-blue-300 mt-1 flex items-center sm:justify-end gap-1">
+              <p className="text-[11px] text-lime-300 mt-1 flex items-center sm:justify-end gap-1">
                 <ShieldCheck className="w-3.5 h-3.5" />
                 <span>Placement Cell Member</span>
               </p>
@@ -144,40 +158,34 @@ export default function DashboardPreview() {
           </p>
         </div>
 
-        {error && (
-          <p className="text-red-500 mb-4 text-sm">{error}</p>
-        )}
+        {error && <p className="text-red-500 mb-4 text-sm">{error}</p>}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          {metrics.map(metric => {
-            const Icon = metric.icon;
-
+          {metrics.map((m, idx) => {
+            const Icon = m.icon;
             return (
               <div
-                key={metric.key}
-                className="bg-white rounded-xl p-5 border border-slate-200/90 shadow-sm hover:shadow-md hover:border-blue-300 transition cursor-pointer group"
+                key={idx}
+                className="bg-white rounded-xl p-5 border border-slate-200/90 shadow-sm hover:shadow-md hover:border-red-300 transition cursor-pointer group"
               >
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-xs font-medium px-2 py-0.5 rounded bg-slate-100 text-slate-600 group-hover:bg-blue-50 group-hover:text-blue-700 transition">
-                    {metric.badge}
+                  <span className="text-xs font-medium px-2 py-0.5 rounded bg-slate-100 text-slate-600 group-hover:bg-red-50 group-hover:text-red-700 transition">
+                    {m.badge}
                   </span>
-
-                  <div className="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-110 transition">
+                  <div
+                    className={`w-9 h-9 rounded-lg ${m.iconBg} ${m.iconColor} flex items-center justify-center group-hover:scale-110 transition`}
+                  >
                     <Icon className="w-5 h-5" />
                   </div>
                 </div>
 
                 <div className="text-3xl font-black text-slate-900 tracking-tight mb-1">
-                  {loading ? '–' : counts?.[metric.key] ?? 0}
+                  {counts ? counts[m.key] : '–'}
                 </div>
-
-                <div className="text-sm font-semibold text-slate-800 mb-1">
-                  {metric.title}
+                <div className="text-sm font-semibold text-slate-800 mb-1 color-blue">
+                  {m.title}
                 </div>
-
-                <p className="text-xs text-slate-500 line-clamp-1">
-                  {metric.desc}
-                </p>
+                <p className="text-xs text-slate-500 line-clamp-1">{m.desc}</p>
               </div>
             );
           })}

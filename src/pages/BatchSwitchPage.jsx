@@ -63,7 +63,7 @@ export default function BatchSwitchPage() {
             ) : (
               <div className="overflow-x-auto bg-white border border-slate-200 rounded-xl">
                 <table className="min-w-full text-sm text-left">
-                  <thead className="bg-slate-100 text-slate-600">
+                  <thead className="bg-orange-950 text-white">
                     <tr>
                       <th className="px-3 py-2 font-semibold">Sl. No</th>
                       {COLUMNS.map(c => (
@@ -75,7 +75,7 @@ export default function BatchSwitchPage() {
                   </thead>
                   <tbody className="divide-y divide-slate-100">
                     {switches.map((record, index) => (
-                      <tr key={record.id} className="hover:bg-slate-50">
+                      <tr key={record.id} className="hover:bg-amber-100">
                         <td className="px-3 py-2">{index + 1}</td>
                         {COLUMNS.map(c => (
                           <td
