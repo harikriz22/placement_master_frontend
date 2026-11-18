@@ -53,7 +53,6 @@ export default function CourseStudentsPage() {
 
   const [batches, setBatches] = useState([]);
   const [students, setStudents] = useState([]);
-
   const [month, setMonth] = useState('');
   const [year, setYear] = useState('');
   const [batch, setBatch] = useState('');

@@ -1,97 +1,38 @@
-export const COURSE_STATUS = [
-  {
-    value: 'ongoing',
-    label: 'Ongoing',
-  },
-  {
-    value: 'completed',
-    label: 'Completed',
-  },
-  {
-    value: 'project',
-    label: 'Project',
-  },
-  {
-    value: 'drop',
-    label: 'Drop',
-  },
-  {
-    value: 'hold',
-    label: 'Hold',
-  },
-  {
-    value: 'rejoined',
-    label: 'Rejoined',
-  },
 
-  {
-    value: 'bs_ongoing',
-    label: 'BatchSwitch/ongoing',
-  },
-  {
-    value: 'bs_completed',
-    label: 'BatchSwitch/completed',
-  },
-  {
-    value: 'bs_rejoined',
-    label: 'BatchSwitch/rejoined',
-  },
-  {
-    value: 'bs_dropped',
-    label: 'BatchSwitch/dropped',
-  },
+export const COURSE_STATUS = [
+  { value: 'Ongoing', label: 'Ongoing' },
+  { value: 'Completed', label: 'Completed' },
+  { value: 'Project', label: 'Project' },
+  { value: 'Drop', label: 'Drop' },
+  { value: 'Hold', label: 'Hold' },
+  { value: 'Rejoined', label: 'Rejoined' },
+
+  { value: 'BatchSwitch/ongoing', label: 'BatchSwitch/ongoing' },
+  { value: 'BatchSwitch/completed', label: 'BatchSwitch/completed' },
+  { value: 'BatchSwitch/rejoined', label: 'BatchSwitch/rejoined' },
+  { value: 'BatchSwitch/dropped', label: 'BatchSwitch/dropped' },
 ];
 
 export const FEE_STATUS = [
-  {
-    value: 'yes',
-    label: 'Yes',
-  },
-  {
-    value: 'no',
-    label: 'No',
-  },
+  { value: 'yes', label: 'Yes' },
+  { value: 'no', label: 'No' },
 ];
 
 export const PROJECT_STATUS = [
-  {
-    value: 'yes',
-    label: 'Yes',
-  },
-  {
-    value: 'no',
-    label: 'No',
-  },
+  { value: 'yes', label: 'Yes' },
+  { value: 'no', label: 'No' },
 ];
 
 export const ELIGIBILITY_STATUS = [
-  {
-    value: 'yes',
-    label: 'Yes',
-  },
-  {
-    value: 'no',
-    label: 'No',
-  },
+  { value: 'yes', label: 'Yes' },
+  { value: 'no', label: 'No' },
 ];
 
 export const PLACEMENT_STATUS = [
-  {
-    value: 'placed',
-    label: 'Placed',
-  },
-  {
-    value: 'placement_needed',
-    label: 'Placement Needed',
-  },
-  {
-    value: 'project_not_completed',
-    label: 'Project Not Completed',
-  },
-  {
-    value: 'placement_not_needed',
-    label: 'Placement Not Needed',
-  },
+  { value: 'Placement needed', label: 'Placement Needed' },
+  { value: 'Placed', label: 'Placed' },
+  { value: 'Project not completed', label: 'Project Not Completed' },
+  { value: 'Placement not needed', label: 'Placement Not Needed' },
 ];
 
 export const MONTHS = [
@@ -108,7 +49,9 @@ export const MONTHS = [
   { value: 11, label: 'November' },
   { value: 12, label: 'December' },
 ];
+
 const thisYear = new Date().getFullYear();
+
 export const YEARS = [thisYear - 1, thisYear, thisYear + 1].map(y => ({
   value: y,
   label: String(y),
@@ -118,5 +61,5 @@ export const labelOf = (list, value) =>
   list.find(item => item.value === value)?.label ?? value;
 
 export const BATCH_SWITCH_STATUS = COURSE_STATUS.filter(s =>
-  s.value.startsWith('bs_')
+  s.value.startsWith('BatchSwitch/')
 );
